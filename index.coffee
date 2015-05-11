@@ -1,7 +1,7 @@
 fs = require 'fs'
 
 module.exports = (exe, params) ->
-  getpath = exe.build params.__path
+  getpath = exe.build params.__source
   getparams = exe.build params.__params
   (cb) ->
     getparams (err, params) ->

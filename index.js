@@ -5,7 +5,7 @@ fs = require('fs');
 
 module.exports = function(exe, params) {
   var getparams, getpath;
-  getpath = exe.build(params.__path);
+  getpath = exe.build(params.__source);
   getparams = exe.build(params.__params);
   return function(cb) {
     return getparams(function(err, params) {
