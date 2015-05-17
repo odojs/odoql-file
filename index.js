@@ -3,27 +3,31 @@ var fs;
 
 fs = require('fs');
 
-module.exports = function(exe, params) {
-  var getparams, getpath;
-  getpath = exe.build(params.__source);
-  getparams = exe.build(params.__params);
-  return function(cb) {
-    return getparams(function(err, params) {
-      return getpath(function(err, path) {
-        if (err != null) {
-          return cb(err);
-        }
-        return fs.readFile(path, params, function(err, buf) {
-          if (err != null) {
-            return cb(err);
-          }
-          if (typeof buf === 'string') {
-            return cb(null, buf);
-          } else {
-            return cb(null, buf.toString());
-          }
+module.exports = {
+  params: {
+    file: function(exe, params) {
+      var getparams, getsource;
+      getsource = exe.build(params.__s);
+      getparams = exe.build(params.__p);
+      return function(cb) {
+        return getparams(function(err, params) {
+          return getsource(function(err, source) {
+            if (err != null) {
+              return cb(err);
+            }
+            return fs.readFile(source, params, function(err, buf) {
+              if (err != null) {
+                return cb(err);
+              }
+              if (typeof buf === 'string') {
+                return cb(null, buf);
+              } else {
+                return cb(null, buf.toString());
+              }
+            });
+          });
         });
-      });
-    });
-  };
+      };
+    }
+  }
 };

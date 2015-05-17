@@ -1,15 +1,20 @@
 fs = require 'fs'
 
-module.exports = (exe, params) ->
-  getpath = exe.build params.__source
-  getparams = exe.build params.__params
-  (cb) ->
-    getparams (err, params) ->
-      getpath (err, path) ->
-        return cb err if err?
-        fs.readFile path, params, (err, buf) ->
-          return cb err if err?
-          if typeof(buf) is 'string'
-            cb null, buf
-          else
-            cb null, buf.toString()
+module.exports =
+  params:
+    file: (exe, params) ->
+      getsource = exe.build params.__s
+      getparams = exe.build params.__p
+      (cb) ->
+        getparams (err, params) ->
+          getsource (err, source) ->
+            return cb err if err?
+            #timer = new Date().getTime()
+            fs.readFile source, params, (err, buf) ->
+              #timer = new Date().getTime() - timer
+              #console.log "#{timer}ms #{source}"
+              return cb err if err?
+              if typeof(buf) is 'string'
+                cb null, buf
+              else
+                cb null, buf.toString()
